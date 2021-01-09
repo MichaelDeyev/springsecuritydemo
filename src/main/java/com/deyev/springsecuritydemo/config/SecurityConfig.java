@@ -1,10 +1,9 @@
 package com.deyev.springsecuritydemo.config;
 
-import com.deyev.springsecuritydemo.model.Permission;
 import com.deyev.springsecuritydemo.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,6 +15,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // необходимый метод для конфигурации собственной "системы безопасности"
@@ -24,10 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()//Cross Site Request Forgery. (способ защиты от csrf угрозы)
                 .authorizeRequests()// какой изер на какие урлы URL будет иметь доступ.
-                .antMatchers("/").permitAll()//к урле "/" имеют доступ все пользователи.
-                .antMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.DEVELOPERS_READ.getPermission())// на чтение (get-request) имеют доступ только пользователи с правом чтения
-                .antMatchers(HttpMethod.POST, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())// на запись (post-request) имеют доступ только пользователи с правом записи
-                .antMatchers(HttpMethod.DELETE, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())// на удаление (delete-request) имеют доступ только пользователи с правом записи
+                .antMatchers("/").permitAll()
                 .anyRequest().authenticated().and().httpBasic()// every request have to be authenticated with Basic64 technology
         ;
     }
