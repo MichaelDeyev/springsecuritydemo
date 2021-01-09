@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -25,8 +26,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()//Cross Site Request Forgery. (способ защиты от csrf угрозы)
                 .authorizeRequests()// какой изер на какие урлы URL будет иметь доступ.
                 .antMatchers("/").permitAll()
-                .anyRequest().authenticated().and().httpBasic()// every request have to be authenticated with Basic64 technology
-        ;
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()// every request have to be authenticated with Basic64 technology
+                .loginPage("/auth/login").permitAll()// define login Page
+                .defaultSuccessUrl("/auth/success")// if login successful
+                .and()
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))// use POST method instead of GET method wile logout
+                .invalidateHttpSession(true)//invalidation session
+                .clearAuthentication(true)//clear all Authentication tips
+                .deleteCookies("JSESSIONID")
+                .logoutSuccessUrl("/auth/login");
     }
 
     // admin creating with encoding password
