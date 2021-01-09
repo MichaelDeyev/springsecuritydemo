@@ -1,5 +1,6 @@
 package com.deyev.springsecuritydemo.config;
 
+import com.deyev.springsecuritydemo.model.Permission;
 import com.deyev.springsecuritydemo.model.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()//Cross Site Request Forgery. (способ защиты от csrf угрозы)
                 .authorizeRequests()// какой изер на какие урлы URL будет иметь доступ.
                 .antMatchers("/").permitAll()//к урле "/" имеют доступ все пользователи.
-                .antMatchers(HttpMethod.GET, "/api/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())// на чтение (get-request) имеет доступ и админ и юзер
-                .antMatchers(HttpMethod.POST, "/api/**").hasRole(Role.ADMIN.name())// на запись (post-request) имеет доступ только админ
-                .antMatchers(HttpMethod.DELETE, "/api/**").hasAnyRole(Role.ADMIN.name())// на удаление (delete-request) имеет доступ только админ
+                .antMatchers(HttpMethod.GET, "/api/**").hasAuthority(Permission.DEVELOPERS_READ.getPermission())// на чтение (get-request) имеют доступ только пользователи с правом чтения
+                .antMatchers(HttpMethod.POST, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())// на запись (post-request) имеют доступ только пользователи с правом записи
+                .antMatchers(HttpMethod.DELETE, "/api/**").hasAuthority(Permission.DEVELOPERS_WRITE.getPermission())// на удаление (delete-request) имеют доступ только пользователи с правом записи
                 .anyRequest().authenticated().and().httpBasic()// every request have to be authenticated with Basic64 technology
         ;
     }
@@ -39,12 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 User.builder()
                         .username("admin")
                         .password(passwordEncoder().encode("admin"))
-                        .roles(Role.ADMIN.name())
+                        .authorities(Role.ADMIN.getAuthorities())
                         .build(),
                 User.builder()
                         .username("user")
                         .password(passwordEncoder().encode("user"))
-                        .roles(Role.USER.name())
+                        .authorities(Role.USER.getAuthorities())
                         .build()
         );
     }

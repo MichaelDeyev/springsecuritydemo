@@ -31,12 +31,12 @@ public class DeveloperRestControllerV1 {
     }
 
     @PostMapping
-    public Developer create(@RequestBody Developer developer){
+    public Developer createUser(@RequestBody Developer developer){
         this.developers.add((developer));
         return developer;
     }
 
-    @DeleteMapping("/id")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id){
         this.developers.removeIf(developer -> developer.getId().equals(id));
     }
