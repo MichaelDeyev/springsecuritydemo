@@ -28,12 +28,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    // необходимый метод для конфигурации собственной "системы безопасности"
+    // necessary to configure custom own defence system
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()//Cross Site Request Forgery. (способ защиты от csrf угрозы)
-                .authorizeRequests()// какой изер на какие урлы URL будет иметь доступ.
+                .csrf().disable()//Cross Site Request Forgery. defender from csrf danger
+                .authorizeRequests()// visible urls depends on concrete user
                 .antMatchers("/").permitAll()
                 .anyRequest().authenticated()
                 .and()
