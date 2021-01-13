@@ -11,5 +11,5 @@ There are 2 users:
 1) login: admin@mail.com; password: admin
 2) login: user; password: 111111
 
-admin-user can create, read, update, delete data on Main Page (only by Postman for now.)
-plain user can read only
+Admin-user can create, read, update, delete data on Main Page (only by Postman for now)
+Plain user can read only
