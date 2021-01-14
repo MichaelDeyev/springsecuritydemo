@@ -44,8 +44,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))// use POST method instead of GET method wile logout
                 .invalidateHttpSession(true)//invalidation session
                 .clearAuthentication(true)//clear all Authentication tips
-                .deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/auth/login");
+                .deleteCookies("JSESSIONID")// clear all Cookie
+                .logoutSuccessUrl("/auth/login");// redirect to login page
     }
 
     @Override
