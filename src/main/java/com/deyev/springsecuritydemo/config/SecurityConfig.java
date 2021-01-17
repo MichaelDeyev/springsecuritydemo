@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()// every request have to be authenticated with Basic64 technology
                 .loginPage("/auth/login").permitAll()// define login Page
-                .defaultSuccessUrl("/auth/success")// if login successful
+                .defaultSuccessUrl("/auth/success")// if login successful   // DON'T FORGET "/" before auth
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))// use POST method instead of GET method wile logout
                 .invalidateHttpSession(true)//invalidation session
